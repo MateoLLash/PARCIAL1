@@ -78,5 +78,10 @@ def consultar_cartera():
                         carteras=carteras,
                         error=error,
                         tipo_filtro=tipo_filtro)
+                        
+import os
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    if not os.path.exists(app.config ['UPLOAD_FOLDER']):
+        os.makedirs(app.config [ 'UPLOAD_FOLDER'])
+    app.run(debug=True, host="0.0.0.0", port=os.getenv("PORT", default=5000))

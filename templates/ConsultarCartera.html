@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado De Carteras Hechas A Mano</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+           
+        }
+        h1 {
+            color: #343a40;
+            text-align: center;
+            border-bottom: 2px solid #343a40;
+            margin-bottom: 30px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .table th {
+            background-color:rgb(0, 41, 117);
+            color: white;
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        .table td {
+            padding: 10px;
+        }
+        .btn-regresar {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 8px 20px;
+            background-color:rgb(0, 41, 117);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .btn {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .btn select, .btn button {
+            
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        .btn button {
+            background-color:rgb(0, 41, 117);
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado De Carteras Hechas A Mano</h1>
+        
+        <div class="btn">
+            <form method="post" action="{{ url_for('consultar_cartera') }}">
+                <label>Filtrar por tipo:
+                    <select name="tipo">
+                        <option value="">Todos los tipos</option>
+                        <option value="tradicional" {% if tipo_filtro == 'tradicional' %}selected{% endif %}>Tradicional</option>
+                        <option value="selvatico" {% if tipo_filtro == 'selvatico' %}selected{% endif %}>Selvático</option>
+                        <option value="andino" {% if tipo_filtro == 'andino' %}selected{% endif %}>Andino</option>
+                        <option value="costeño" {% if tipo_filtro == 'costeño' %}selected{% endif %}>Costeño</option>
+                    </select>
+                </label>
+                <button type="submit">Filtrar</button>
+            </form>
+        </div>
+
+        {% if error %}
+            <div >{{ error }}</div>
+        {% else %}
+            <div >Tipo: {{ tipo_filtro if tipo_filtro else "Todos" }}</div>
+            
+            <table border="3", class="table">
+                <thead>
+                    <tr>
+                        <th>Código Cartera</th>
+                        <th>Descripción</th>
+                        <th>Tipo Cartera</th>
+                        <th>Precio</th>
+                        <th>Fecha De Registro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cartera in carteras %}
+                    <tr>
+                        <td>{{ cartera.id }}</td>
+                        <td>{{ cartera.descripcion }}</td>
+                        <td>{{ cartera.tipo }}</td>
+                        <td>S/ {{ "%.2f"|format(cartera.precio) }}</td>
+                        <td>{{ cartera.fecha.strftime('%d/%m/%Y') if cartera.fecha }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No se encontraron carteras</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <a href="{{ url_for('registrar_cartera') }}" class="btn-regresar">Regresar</a>
+    </div>
+</body>
+</html>

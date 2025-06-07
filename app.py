@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import json
+import os
 
 app = Flask(__name__)
 
@@ -78,8 +79,7 @@ def consultar_cartera():
                         carteras=carteras,
                         error=error,
                         tipo_filtro=tipo_filtro)
-                        
-import os
+
 
 if __name__ == '__main__':
     if not os.path.exists(app.config ['UPLOAD_FOLDER']):
